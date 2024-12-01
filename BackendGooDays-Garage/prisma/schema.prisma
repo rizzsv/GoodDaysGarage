@@ -15,6 +15,21 @@ model User {
   email       String   @unique
   created_at  DateTime @default(now())
   updated_at  DateTime @default(now())
+  Order       Order[]
+}
+
+model Order {
+  id          Int      @id @default(autoincrement())
+  user_id     Int
+  catalog_id  Int
+  quantity    Int
+  status      order_status
+  total_price Float
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now())
+
+  user    User    @relation(fields: [user_id], references: [id])
+  Catalog Catalog @relation(fields: [catalog_id], references: [id])
 }
 
 model Catalog {
@@ -28,6 +43,7 @@ model Catalog {
   updated_at  DateTime @default(now())
 
   transactions_items TransactionsItem[]
+  Order              Order[]
 
   @@map("catalog")
 }
@@ -70,4 +86,10 @@ enum transactions_status {
   PENDING_PAYMENT
   PAID
   CANCELED
+}
+
+enum order_status {
+  DIKEMAS
+  DIKIRIM 
+  PESANAN_DITERIMA
 }
